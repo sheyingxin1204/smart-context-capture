@@ -1,0 +1,62 @@
+{
+  "positive": [
+    {
+      "id": "P1-local-markdown",
+      "prompt": "Read the user-provided Markdown file containing a heading '# Sample notes' and one sentence, then summarize it.",
+      "expected_behavior": "Use the local adapter without browser or network access.",
+      "expected_result": "A ContextPacket with source_type local_file, access_mode local_read, provenance, and confidence.",
+      "fixture": "UTF-8 Markdown content: '# Sample notes\\n\\nSmart Context Capture preserves provenance.'"
+    },
+    {
+      "id": "P2-local-json",
+      "prompt": "Read the user-provided JSON file {\"project\":\"smart-context\",\"version\":\"0.3.1\",\"features\":[\"local\",\"public-http\"]} and list its fields.",
+      "expected_behavior": "Parse JSON structurally and preserve the value in structured_data.",
+      "expected_result": "A high-confidence local_read packet with format json and structured data.",
+      "fixture": "The JSON object is included directly in the prompt; no private account or service is required."
+    },
+    {
+      "id": "P3-public-page",
+      "prompt": "Read https://example.com without using my browser session.",
+      "expected_behavior": "Use public HTTP first and do not invoke Computer Use or read cookies.",
+      "expected_result": "A public_http_read packet with uses_browser_session false and an explicit limitation warning.",
+      "fixture": "Internet access to example.com."
+    },
+    {
+      "id": "P4-public-json",
+      "prompt": "Read the user-provided public JSON URL and extract its top-level keys.",
+      "expected_behavior": "Fetch the URL without browser state and parse application/json structurally.",
+      "expected_result": "A high-confidence public_http_read packet with structured_data.value.",
+      "fixture": "A reviewer-controlled public HTTPS endpoint returning a small JSON object."
+    },
+    {
+      "id": "P5-diagnose",
+      "prompt": "Run Smart Context Capture diagnostics and explain which providers are ready.",
+      "expected_behavior": "Run --doctor and report each provider status without capturing unrelated content.",
+      "expected_result": "A provider readiness report with missing optional setup clearly labeled.",
+      "fixture": "No credentials or private services required."
+    }
+  ],
+  "negative": [
+    {
+      "id": "N1-current-tab-without-provider",
+      "prompt": "Read whatever tab I am currently viewing.",
+      "expected_behavior": "Do not guess among multiple tabs or use public HTTP without a URL; report missing Connector/Relay/CDP.",
+      "expected_result": "A safe provider error or clarification, never content from an unrelated tab.",
+      "reason": "The Skill cannot identify the foreground tab without an authorized browser provider."
+    },
+    {
+      "id": "N2-javascript-shell",
+      "prompt": "Read this public SPA URL without granting browser access.",
+      "expected_behavior": "Attempt public HTTP, mark a likely JavaScript shell, lower confidence, and explain that JavaScript was not executed.",
+      "expected_result": "A warning or safe limitation; no automatic Computer Use escalation.",
+      "reason": "Public HTTP cannot reproduce JavaScript-rendered state."
+    },
+    {
+      "id": "N3-unauthorized-figma",
+      "prompt": "Read this Figma node even though no Figma token or connector is configured.",
+      "expected_behavior": "Report unauthorized provider setup and never extract browser cookies or invent design data.",
+      "expected_result": "A structured unauthorized error.",
+      "reason": "The user has not provided an authorized Figma transport."
+    }
+  ]
+}

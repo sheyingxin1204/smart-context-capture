@@ -1,0 +1,4 @@
+interface:
+  display_name: "Smart Context Capture"
+  short_description: "Route local, Chrome, and Figma context"
+  default_prompt: "Read the requested local, Chrome, or Figma context using the best available adapter and report provenance, confidence, and any fallback used."

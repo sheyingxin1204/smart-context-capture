@@ -1,0 +1,35 @@
+{
+  "name": "smart-context-capture",
+  "version": "0.3.1",
+  "description": "A low-permission Codex skill for reading selected local files and public webpages, with explicit upgrades for authorized Chrome and Figma context.",
+  "author": {
+    "name": "sheyingxin1204",
+    "url": "https://github.com/sheyingxin1204"
+  },
+  "homepage": "https://github.com/sheyingxin1204/smart-context-capture",
+  "repository": "https://github.com/sheyingxin1204/smart-context-capture",
+  "license": "MIT",
+  "keywords": [
+    "context",
+    "files",
+    "browser",
+    "figma",
+    "codex"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Smart Context Capture",
+    "shortDescription": "Read local and web context with least privilege.",
+    "longDescription": "Reads local files and public webpages without unnecessary browser control, then upgrades explicitly to authorized Chrome or Figma providers when login state, JavaScript, or design structure is required. Results include provenance, confidence, access mode, and safe fallback warnings.",
+    "developerName": "sheyingxin1204",
+    "category": "Productivity",
+    "capabilities": ["Read"],
+    "websiteURL": "https://github.com/sheyingxin1204/smart-context-capture",
+    "defaultPrompt": [
+      "Read the selected file with structured provenance.",
+      "Read this public webpage without browser control when possible.",
+      "Inspect the selected Figma node and explain any missing access."
+    ],
+    "brandColor": "#2563EB"
+  }
+}

@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "smart-context-capture-core"
+version = "0.3.1"
+description = "Dependency-free routing and result contracts for a Codex Smart Context Skill"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+rich = ["markitdown"]
+
+[project.scripts]
+smart-context = "smart_context.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
