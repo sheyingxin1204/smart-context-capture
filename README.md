@@ -5,13 +5,17 @@
 ## 快速开始
 
 ```powershell
+# 完整仓库开发方式（可编辑安装，便于修改核心代码）
 python -m pip install --editable . --no-deps
 smart-context --doctor --pretty
 smart-context .\planning\PLAN.md --pretty
+
+# 直接使用 Skill 方式：不依赖 site-packages，启动器带有 stdlib 核心副本
+python .\skills\smart-context-capture\scripts\run_capture.py .\planning\PLAN.md --pretty
+
 # 可选持久缓存（只在显式指定目录时启用）
 smart-context .\planning\PLAN.md --cache-dir .\.smart-context-cache --pretty
-# 如果当前 shell 没有安装 smart-context，可从任意目录运行插件内置启动器
-python .\skills\smart-context-capture\scripts\run_capture.py --doctor --pretty
+python .\scripts\sync_skill_runtime.py --check
 python .\scripts\check_release.py
 ```
 
@@ -24,7 +28,10 @@ python .\scripts\check_release.py
 - Figma 只读：Figma REST API。设置显式 `FIGMA_ACCESS_TOKEN`；支持文件/节点链接、节点树、组件/样式摘要和可选渲染 URL。
 - PDF、Office、图片 OCR 和官方 MCP：通过同一 Gateway 注册可选适配器，不把第三方依赖硬编码进核心包。
 
-运行时要求 Python 3.10+。如果 Codex 当前环境没有 Python，Skill 会报告缺少运行时；它不会把一个本可用的低权限读取偷偷升级成 Computer Use。
+运行时要求 Python 3.10+。Skill 目录内的启动器已经携带不依赖第三方包的核心副本，因此从
+插件或单独 Skill 目录安装后即可完成本地文件和公开 HTTP 读取；完整仓库仍可用可编辑安装
+开发。PDF、Office、OCR 等富文档能力仍需用户自行安装可选解析器。如果 Codex 当前环境没有
+Python，Skill 会报告缺少运行时；它不会把一个本可用的低权限读取偷偷升级成 Computer Use。
 
 ## Chrome 连接方式
 
@@ -118,6 +125,5 @@ Token 不写入项目文件，也不会从浏览器登录态中提取。若已�
 
 项目现阶段适合本地安装和测试；正式发布时可把 GitHub 源码作为开发分发，再按 Codex Plugin 提交流程提交审核。第三方扩展、MCP、Chrome 登录态和 Figma token 都必须由最终用户单独配置。
 
-发布准备材料位于 `submission/`：包括 listing 文案、隐私/条款草稿、5 个正向和 3 个负向测试用例，以及 0.3.1 release notes。公开提交仍需要真实的开发者身份、公开 HTTPS 网站/支持/隐私/条款 URL、公开仓库和生产级品牌素材；这些不能用占位信息代替。
-
-正式上传包：`dist/smart-context-capture-0.3.1-release.zip`；校验值见同目录 `.sha256` 文件。发布包已通过 Plugin validator，并排除了测试缓存、`.env`、`pyc` 和本机 egg-info。
+发布准备材料位于 `submission/`：包括 listing 文案、隐私/条款草稿、5 个正向和 3 个负向测试用例，以及 release notes。运行
+`python .\scripts\build_release.py` 会按显式白名单生成正式上传包，自动排除测试、草稿、缓存、`.env`、`pyc` 和 Git 元数据，并生成同名 `.sha256` 文件。公开提交仍需要真实的开发者身份、公开 HTTPS 网站/支持/隐私/条款 URL、公开仓库和生产级品牌素材；这些不能用占位信息代替。

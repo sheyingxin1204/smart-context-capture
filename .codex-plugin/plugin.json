@@ -1,6 +1,6 @@
 {
   "name": "smart-context-capture",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A low-permission Codex skill for reading selected local files and public webpages, with explicit upgrades for authorized Chrome and Figma context.",
   "author": {
     "name": "sheyingxin1204",

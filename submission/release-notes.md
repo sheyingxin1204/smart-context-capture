@@ -1,4 +1,4 @@
-# Release notes — 0.3.1
+# Release notes — 0.3.2
 
 Initial skills-only submission candidate for Smart Context Capture.
 
@@ -8,6 +8,11 @@ Initial skills-only submission candidate for Smart Context Capture.
 - Added ambiguous-tab refusal, JavaScript-shell detection, access-mode
   provenance, lazy provider probing, and gateway timing traces.
 - Added a bundled launcher that works from any working directory.
+- Bundled a synchronized dependency-free Python core inside the Skill so a
+  standalone Skill install can read local files and public HTTP without a
+  separate editable package install.
+- Added a reproducible allow-list release builder and standalone-launcher
+  regression test.
 - Added URL metadata redaction for userinfo and sensitive query parameters in
   packet serialization, provenance, links, and opt-in cache files.
 - Added an explicit Python 3.10+ prerequisite and a safe missing-runtime

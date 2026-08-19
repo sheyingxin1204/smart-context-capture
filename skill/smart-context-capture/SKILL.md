@@ -5,9 +5,9 @@ description: Route user-selected local files, public webpages, authorized Chrome
 
 # Smart Context Capture
 
-This is the project skill for the unified context gateway. It is currently a
-development preview: the local-file adapter is available; Chrome and Figma
-adapters must be installed and authorized separately.
+This is the compatibility copy of the unified context gateway. The canonical
+plugin Skill lives under `skills/smart-context-capture/`; Chrome and Figma
+adapters must still be installed and authorized separately.
 
 ## Workflow
 
@@ -21,9 +21,11 @@ adapters must be installed and authorized separately.
    public `http(s)` URL, try the low-permission public HTTP adapter before
    requesting browser or Computer Use access.
 4. For a local file, use the project gateway (`smart-context` or
-   `python -m smart_context`) and return its JSON `ContextPacket`. The current
-   dependency-free parser supports text/code, Markdown, HTML, CSV/TSV, and
-   JSON. PDF, Office, and image parsing require an optional adapter.
+   `python -m smart_context`) and return its JSON `ContextPacket`. The
+   canonical Skill launcher also carries the dependency-free core, so a
+   standalone Skill installation does not need a separate editable package
+   install. The current parser supports text/code, Markdown, HTML, CSV/TSV,
+   and JSON. PDF, Office, and image parsing require an optional adapter.
    For an existing Chrome tab, use the Codex Chrome connector/relay first.
    That connector is separate from the Python gateway's raw CDP endpoint: a
    working connector does not imply that `http://127.0.0.1:9222` is listening.

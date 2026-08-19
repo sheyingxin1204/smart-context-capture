@@ -9,7 +9,7 @@
     },
     {
       "id": "P2-local-json",
-      "prompt": "Read the user-provided JSON file {\"project\":\"smart-context\",\"version\":\"0.3.1\",\"features\":[\"local\",\"public-http\"]} and list its fields.",
+      "prompt": "Read the user-provided JSON file {\"project\":\"smart-context\",\"version\":\"0.3.2\",\"features\":[\"local\",\"public-http\"]} and list its fields.",
       "expected_behavior": "Parse JSON structurally and preserve the value in structured_data.",
       "expected_result": "A high-confidence local_read packet with format json and structured data.",
       "fixture": "The JSON object is included directly in the prompt; no private account or service is required."
@@ -23,10 +23,10 @@
     },
     {
       "id": "P4-public-json",
-      "prompt": "Read the user-provided public JSON URL and extract its top-level keys.",
+      "prompt": "Read https://raw.githubusercontent.com/sheyingxin1204/smart-context-capture/main/submission/fixtures/data.json and extract its top-level keys.",
       "expected_behavior": "Fetch the URL without browser state and parse application/json structurally.",
       "expected_result": "A high-confidence public_http_read packet with structured_data.value.",
-      "fixture": "A reviewer-controlled public HTTPS endpoint returning a small JSON object."
+      "fixture": "The repository's public, reviewer-accessible JSON fixture; no login or browser session is required."
     },
     {
       "id": "P5-diagnose",

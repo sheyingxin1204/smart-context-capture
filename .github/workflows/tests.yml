@@ -20,4 +20,8 @@ jobs:
           $env:PYTHONPATH = "$env:GITHUB_WORKSPACE\src"
           python -m unittest discover -s tests -v
       - name: Run release preflight
-        run: python -B scripts/check_release.py
+        run: |
+          python -B scripts/sync_skill_runtime.py --check
+          python -B scripts/check_release.py
+      - name: Verify clean release build
+        run: python -B scripts/build_release.py --output "$env:RUNNER_TEMP\smart-context-release.zip"
