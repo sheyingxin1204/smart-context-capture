@@ -26,6 +26,46 @@ python .\scripts\check_release.py
 
 运行时要求 Python 3.10+。如果 Codex 当前环境没有 Python，Skill 会报告缺少运行时；它不会把一个本可用的低权限读取偷偷升级成 Computer Use。
 
+## Chrome 连接方式
+
+Codex 的 Chrome connector 和 Python 网关的原始 CDP 是两条不同链路。
+在 Codex Desktop 中读取用户已经登录的现有标签页，优先使用 Codex 的
+Chrome connector；这条路径不需要暴露浏览器 Cookie，也不要求 `9222` 端口。
+只有在需要让 Python 直接读取 DOM，或在 CLI 中使用独立浏览器会话时，才启用
+下面的 CDP fallback。
+
+Chrome 136 及更高版本不允许对默认用户目录直接开启远程调试，因此必须使用
+非默认的 `--user-data-dir`。项目提供了 Windows 辅助脚本：
+
+```powershell
+& .\skills\smart-context-capture\scripts\start_cdp.ps1
+smart-context "https://example.com" --source chrome_tab `
+  --browser-session --cdp-url http://127.0.0.1:9222 --pretty
+```
+
+脚本会启动一个隔离的 Chrome profile；它不会自动接管你普通 Chrome 中已经
+打开的标签页。需要当前登录态或当前 tab 时，应回到 Codex Chrome connector。
+
+## Figma 连接方式
+
+推荐在 Codex Desktop 的 **Plugins → Figma → Install Figma** 中安装并完成
+OAuth 授权。这是远程 Figma MCP，浏览器中的 Figma 链接可以直接交给它，
+不需要把 Token 放进 Python 环境。
+
+如果你使用 Figma Desktop 的本地 MCP：在 Figma 的 Dev Mode 中启用 MCP，
+然后在 Codex 的 **Settings → MCP servers → Add server** 添加 Streamable HTTP
+地址 `http://127.0.0.1:3845/mcp`，名称可设为 `figma-desktop`。只有在官方
+MCP 不可用时，才使用下面的 REST token fallback。
+
+```powershell
+$env:FIGMA_ACCESS_TOKEN = "<只在当前终端临时使用，不要提交到仓库>"
+smart-context "https://www.figma.com/design/<file-key>/<slug>?node-id=10-20" `
+  --source figma_node --pretty
+```
+
+官方 MCP 或 Chrome connector 的认证由各自的连接器管理；本 Skill 不会从
+浏览器 Cookie、Figma 桌面会话或隐藏应用数据中提取 Token。
+
 ## Chrome 前提
 
 普通 Chrome 进程不会因为 Python 存在就自动开放当前标签页。必须由用户显式启动一个带远程调试端口的 Chrome 实例，或配置一个兼容的 Chrome Relay/MCP。示例（使用独立临时 profile，避免触碰普通 profile）：

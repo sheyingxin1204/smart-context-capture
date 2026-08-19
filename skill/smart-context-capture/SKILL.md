@@ -24,10 +24,14 @@ adapters must be installed and authorized separately.
    `python -m smart_context`) and return its JSON `ContextPacket`. The current
    dependency-free parser supports text/code, Markdown, HTML, CSV/TSV, and
    JSON. PDF, Office, and image parsing require an optional adapter.
-   For an existing Chrome tab, the bundled read adapter needs a local CDP
-   endpoint (`SMART_CONTEXT_CDP_URL`, normally port 9222). For Figma REST
-   fallback, require an explicit `FIGMA_ACCESS_TOKEN`; the official Figma MCP
-   can be registered as the primary provider instead.
+   For an existing Chrome tab, use the Codex Chrome connector/relay first.
+   That connector is separate from the Python gateway's raw CDP endpoint: a
+   working connector does not imply that `http://127.0.0.1:9222` is listening.
+   Use the bundled read adapter with `--browser-session` only when the user
+   explicitly configured a compatible CDP/relay URL (`--cdp-url` or
+   `SMART_CONTEXT_CDP_URL`). For Figma, use the official Figma MCP when its
+   tools are present; require an explicit `FIGMA_ACCESS_TOKEN` only for the
+   REST fallback.
    For a public URL, use `smart-context "<url>" --source chrome_tab --pretty`
    before invoking desktop/browser control. This route is public HTTP first,
    even when a CDP endpoint is available. If login state, JavaScript, or the
@@ -43,9 +47,12 @@ adapters must be installed and authorized separately.
 
 Provider order is local parser → optional rich parser → OCR/export for local
 files; public HTTP → configured Chrome connector/MCP → CDP → screenshot for
-Chrome; official Figma MCP → REST → export/screenshot for Figma. Every fallback
-must be labeled. Never claim public HTTP is equivalent to a logged-in or
-JavaScript-rendered browser tab.
+Chrome; official Figma MCP → REST → export/screenshot for Figma. The built-in
+Chrome connector can read authorized existing tabs, while the raw CDP adapter
+normally uses an isolated Chrome profile; these must not be presented as the
+same session. The remote Figma MCP uses OAuth in Codex and does not require
+exposing a token to Python. Every fallback must be labeled. Never claim public
+HTTP is equivalent to a logged-in or JavaScript-rendered browser tab.
 
 For an ordinary `http(s)` URL, do not invoke Computer Use or desktop/browser
 control before attempting the public HTTP command. Upgrade only when the

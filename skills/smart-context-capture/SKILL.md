@@ -30,10 +30,16 @@ keeps browser/Figma access behind explicit, user-installed providers.
    The launcher requires Python 3.10+; if the runtime is unavailable, report
    that prerequisite instead of silently escalating a read to Computer Use.
 5. For an existing Chrome tab or a page whose login/JavaScript state matters,
-   require a user-configured CDP/relay provider and pass
-   `--browser-session`; for Figma REST fallback, require an explicit
-   `FIGMA_ACCESS_TOKEN`. An
-   official Chrome/Figma MCP may replace either transport when registered.
+   use the Codex Chrome connector/relay first. The connector is a separate
+   transport from the Python gateway's raw CDP endpoint: a working connector
+   does not imply that `http://127.0.0.1:9222` is listening. When the connector
+   is available, have the agent read the authorized tab through that connector
+   and normalize the returned result; do not invoke Computer Use merely because
+   the raw CDP probe is unavailable. Use `--browser-session` only when the user
+   explicitly configured a compatible CDP/relay URL (pass `--cdp-url` or set
+   `SMART_CONTEXT_CDP_URL`). For Figma, use the official Figma MCP when its
+   tools are present; use the REST adapter only as an explicit fallback with
+   `FIGMA_ACCESS_TOKEN`.
 6. Preserve source identity, adapter, encoding/format metadata, confidence,
    warnings, and whether a fallback was used.
 7. Use persistent caching only when the user explicitly chooses a cache
@@ -47,9 +53,15 @@ keeps browser/Figma access behind explicit, user-installed providers.
 - Local files: built-in parser, then optional MarkItDown, then a user-approved
   OCR/export adapter.
 - Chrome: an available Codex Chrome connector/MCP or relay first, then the
-  bundled CDP adapter, then a clearly labeled screenshot fallback.
+  bundled CDP adapter, then a clearly labeled screenshot fallback. The
+  built-in connector can read the user's authorized existing tabs; the raw
+  CDP adapter normally uses an isolated Chrome profile and must not be
+  presented as the same session.
 - Figma: official Figma MCP first, then the bundled REST adapter, then a
-  clearly labeled export/screenshot fallback.
+  clearly labeled export/screenshot fallback. The remote Figma MCP uses an
+  OAuth connection in Codex and does not require exposing a token to Python;
+  the desktop MCP uses the local Streamable HTTP endpoint configured by the
+  user. Only the REST fallback reads `FIGMA_ACCESS_TOKEN`.
 
 Permission rule: public HTTP and local parsing do not replace browser login
 state, JavaScript execution, or visual interaction. If those are required,
