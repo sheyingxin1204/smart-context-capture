@@ -29,7 +29,7 @@ submission should not reference an existing third-party integration ID.
 
 - `listing-draft.md`: customer-facing listing copy and capability boundaries.
 - `test-cases.json`: five positive and three negative reviewer-run cases.
-- `release-notes.md`: release notes for version 0.3.1.
+- `release-notes.md`: release notes for version 0.3.2.
 - `privacy-policy-draft.md`: data-handling disclosure to host at a real HTTPS URL
   after legal/publisher review.
 - `terms-draft.md`: terms draft to host at a real HTTPS URL after review.
@@ -38,5 +38,7 @@ The final upload should preserve the tested plugin tree: `.codex-plugin/`,
 `skills/`, `src/`, the launcher under `skills/.../scripts/`, and the package
 metadata required by the launcher.
 
-Current upload artifact: `dist/smart-context-capture-0.3.1-release.zip`.
-SHA-256: `88B99AC62DB4EC278059761362E13F53ED60E33EED2479EA275ABC218147BFF8`.
+Build the current upload artifact with `python scripts/build_release.py`:
+`dist/smart-context-capture-0.3.2-release.zip`. The script writes a matching
+`.sha256` file and uses an explicit allow-list so tests, drafts, caches, and
+credentials cannot enter the upload.

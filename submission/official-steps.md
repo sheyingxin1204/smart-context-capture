@@ -16,16 +16,15 @@ The submission guide is the source of truth if the portal UI changes.
 From `C:\tmp\codex-smart-context-skill`:
 
 ```powershell
+python -B scripts/sync_skill_runtime.py --check
 python -B scripts/check_release.py
 python -m unittest discover -s tests -v
-Get-FileHash .\dist\smart-context-capture-0.3.1-release.zip -Algorithm SHA256
+python -B scripts/build_release.py
+Get-FileHash .\dist\smart-context-capture-0.3.2-release.zip -Algorithm SHA256
 ```
 
-Expected release hash:
-`88B99AC62DB4EC278059761362E13F53ED60E33EED2479EA275ABC218147BFF8`.
-
 Upload only:
-`dist/smart-context-capture-0.3.1-release.zip`.
+`dist/smart-context-capture-0.3.2-release.zip`.
 
 Do not upload `tests/`, `submission/`, caches, `__pycache__/`, or credentials.
 
@@ -67,8 +66,9 @@ Copy the customer-facing text from `listing-draft.md`, then enter:
 
 In the Skills tab upload the final ZIP from step 1. Keep the tested tree intact:
 `.codex-plugin/`, `skills/`, `src/`, `scripts/`, `README.md`, `LICENSE`, and
-`pyproject.toml`. The skill contains the Python launcher; Chrome, Figma,
-MarkItDown, and OCR remain optional user-configured providers.
+`pyproject.toml`. The skill contains the Python launcher and a synchronized
+dependency-free core; Chrome, Figma, MarkItDown, and OCR remain optional
+user-configured providers.
 
 ## 7. Add prompts and reviewer tests
 

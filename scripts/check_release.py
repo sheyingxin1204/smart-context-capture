@@ -40,6 +40,19 @@ def main() -> int:
         if "--browser-session" not in contents or "public HTTP" not in contents:
             errors.append("Skill instructions do not document the permission ladder")
 
+    vendor_root = root / "skills" / "smart-context-capture" / "scripts" / "_vendor" / "smart_context"
+    source_root = root / "src" / "smart_context"
+    if source_root.is_dir():
+        source_files = {path.name: path for path in source_root.glob("*.py")}
+        vendor_files = {path.name: path for path in vendor_root.glob("*.py")} if vendor_root.is_dir() else {}
+        if source_files.keys() != vendor_files.keys():
+            errors.append("standalone Skill runtime is not synchronized with src/smart_context")
+        else:
+            for name, source_file in source_files.items():
+                if source_file.read_bytes() != vendor_files[name].read_bytes():
+                    errors.append(f"standalone Skill runtime differs from source: {name}")
+                    break
+
     forbidden = re.compile(
         r"(^|[\\/])(__pycache__|\.smart-context-cache|\.env$|\.git)([\\/]|$)|\.pyc$"
     )

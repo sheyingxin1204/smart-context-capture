@@ -20,10 +20,12 @@ keeps browser/Figma access behind explicit, user-installed providers.
    For an ordinary public `http(s)` URL, try the low-permission public HTTP
    adapter before requesting browser or Computer Use access.
 4. For a local file, use `smart-context` or the bundled
-   `scripts/run_capture.py` launcher and return its JSON `ContextPacket`. The bundled core currently supports
-   text/code, Markdown, HTML, CSV/TSV, and JSON. PDF, Office, and image
-   parsing require an optional adapter. The optional MarkItDown provider can
-   be installed for rich documents.
+   `scripts/run_capture.py` launcher and return its JSON `ContextPacket`. The
+   launcher is self-contained for the dependency-free core, so a standalone
+   Skill install does not require a separate editable package install. The
+   bundled core currently supports text/code, Markdown, HTML, CSV/TSV, and
+   JSON. PDF, Office, and image parsing require an optional adapter. The
+   optional MarkItDown provider can be installed for rich documents.
    For a public URL, use `smart-context "<url>" --source chrome_tab --pretty`
    before invoking desktop/browser control. This route is public HTTP first,
    even when a CDP endpoint is available.
